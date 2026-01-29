@@ -53,13 +53,13 @@ body {
 }
 
 .card h1 {
-  font-size: 1.75rem;
+  font-size: 1.55rem;
   font-weight: 900;
-  background: linear-gradient(90deg, #2db8f9 0%, #7b5cfa 50%, #aa30ff 100%);
+  background: linear-gradient(90deg, #2db8f9, #7b5cfa 50%, #aa30ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 0.75rem;
+  margin-bottom: .75rem;
   text-align: center;
   line-height: 1.4;
 }
