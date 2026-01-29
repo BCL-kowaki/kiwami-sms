@@ -32,13 +32,13 @@ body {
 .card {
   background: 
     linear-gradient(#1a1a2e, #1a1a2e) padding-box,
-    linear-gradient(90deg, #2db8f9 0%, #7b5cfa 50%, #aa30ff 100%) border-box;
+    linear-gradient(90deg, #2db8f9, #7b5cfa 50%, #aa30ff) border-box;
   border-radius: 16px;
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 1.5rem;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   border: 2px solid transparent;
   width: 100%;
-  animation: slideUp 0.4s ease-out;
+  animation: slideUp .4s ease-out;
 }
 
 @keyframes slideUp {

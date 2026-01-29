@@ -261,7 +261,7 @@ export default function VerifyPage() {
             <PhoneIcon className="" />
           </div>
         </div>
-        <h1>ご本人確認のため、<br />SMS認証をお願いします</h1>
+        <h1>ご本人様確認のため、<br />SMS認証をお願いします</h1>
         <p className="subtitle">
           レポートを閲覧するには、電話番号によるSMS認証が必要です
         </p>
