@@ -11,7 +11,6 @@ export default function AdminPage() {
   const [verifyUrl, setVerifyUrl] = useState<string | null>(null);
   
   // レポート入力フォーム
-  const [reportType, setReportType] = useState<'fixed' | 'custom'>('fixed');
   const [reportUrl, setReportUrl] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
 
@@ -73,7 +72,7 @@ export default function AdminPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          reportType,
+          reportType: 'custom',
           reportUrl: reportUrl.trim() || undefined,
           customerEmail: customerEmail.trim() || undefined,
         }),
@@ -174,46 +173,20 @@ export default function AdminPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="reportType">レポートタイプ</label>
-            <select
-              id="reportType"
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value as 'fixed' | 'custom')}
+            <label htmlFor="reportUrl">レポートURL</label>
+            <input
+              id="reportUrl"
+              type="url"
+              value={reportUrl}
+              onChange={(e) => setReportUrl(e.target.value)}
+              placeholder="https://drive.google.com/file/d/xxxxx/view"
               disabled={loading}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #2a2a3e',
-                borderRadius: '10px',
-                fontSize: '1rem',
-                background: '#0f0f1a',
-                color: '#ffffff',
-              }}
-            >
-              <option value="fixed">固定レポート（デフォルト）</option>
-              <option value="custom">カスタムレポート</option>
-            </select>
-          </div>
-
-          {reportType === 'custom' && (
-            <div className="form-group">
-              <label htmlFor="reportUrl">PDF URL（任意）</label>
-              <input
-                id="reportUrl"
-                type="url"
-                value={reportUrl}
-                onChange={(e) => setReportUrl(e.target.value)}
-                placeholder="https://example.com/report.pdf"
-                disabled={loading}
-              />
-              <div className="input-hint">
-                <span>※ PDFファイルのURLを設定すると、レポートページにダウンロードボタンが表示されます</span>
-              </div>
-              <div className="input-hint" style={{ marginTop: '0.5rem' }}>
-                <span>※ レポートのタイトルと本文は固定の文言が使用されます</span>
-              </div>
+              required
+            />
+            <div className="input-hint">
+              <span>※ Google DriveやDropboxなどの共有URLを入力してください</span>
             </div>
-          )}
+          </div>
 
           {error && (
             <div className="error">
@@ -221,8 +194,8 @@ export default function AdminPage() {
             </div>
           )}
 
-          <button type="submit" disabled={loading}>
-            {loading ? '発行中...' : 'tokenを発行'}
+          <button type="submit" disabled={loading || !reportUrl.trim()}>
+            {loading ? '発行中...' : 'URLを発行'}
           </button>
         </form>
 
