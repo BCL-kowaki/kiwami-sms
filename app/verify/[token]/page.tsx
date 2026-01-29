@@ -265,20 +265,6 @@ export default function VerifyPage() {
         </p>
         <form onSubmit={handleSendSMS}>
           <div className="form-group">
-            <label htmlFor="email">メールアドレス</label>
-            <div className="input-wrapper">
-              <MailIcon className="input-icon" />
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@email.com"
-                disabled={loading}
-              />
-            </div>
-          </div>
-          <div className="form-group">
             <label htmlFor="phone">電話番号</label>
             <div className="input-wrapper">
               <PhoneIcon className="input-icon" />
