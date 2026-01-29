@@ -7,6 +7,14 @@ interface NotifyAdminParams {
   token: string;
 }
 
+// 国際形式（+81...）を日本形式（0...）に変換
+function formatPhoneForDisplay(phone: string): string {
+  if (phone.startsWith('+81')) {
+    return '0' + phone.slice(3);
+  }
+  return phone;
+}
+
 // SESクライアントの初期化
 const sesClient = new SESClient({
   region: process.env.AWS_SES_REGION || 'ap-northeast-1',
@@ -38,12 +46,13 @@ export async function notifyAdminOfVerification({
   }
 
   const subject = '【SMS認証完了】新しい認証がありました';
+  const displayPhone = formatPhoneForDisplay(phone);
   const body = `
 SMS認証が完了しました。
 
 ■ 認証情報
 ━━━━━━━━━━━━━━━━━━━━━━
-電話番号: ${phone}
+電話番号: ${displayPhone}
 メールアドレス: ${email || '未入力'}
 Token: ${token}
 認証日時: ${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}
