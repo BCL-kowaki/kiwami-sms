@@ -13,6 +13,7 @@ export default function AdminPage() {
   // レポート入力フォーム
   const [reportType, setReportType] = useState<'fixed' | 'custom'>('fixed');
   const [reportUrl, setReportUrl] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
 
   useEffect(() => {
     checkAuth();
@@ -74,6 +75,7 @@ export default function AdminPage() {
         body: JSON.stringify({
           reportType,
           reportUrl: reportUrl.trim() || undefined,
+          customerEmail: customerEmail.trim() || undefined,
         }),
         credentials: 'include',
       });
@@ -85,6 +87,7 @@ export default function AdminPage() {
         setVerifyUrl(data.verifyUrl);
         // フォームをリセット
         setReportUrl('');
+        setCustomerEmail('');
       } else {
         setError(data.message || 'tokenの発行に失敗しました');
       }
@@ -155,6 +158,21 @@ export default function AdminPage() {
         <p className="subtitle">レポート閲覧用のtokenを発行します</p>
 
         <form onSubmit={handleGenerateToken}>
+          <div className="form-group">
+            <label htmlFor="customerEmail">送る顧客のメールアドレス（任意）</label>
+            <input
+              id="customerEmail"
+              type="email"
+              value={customerEmail}
+              onChange={(e) => setCustomerEmail(e.target.value)}
+              placeholder="customer@example.com"
+              disabled={loading}
+            />
+            <div className="input-hint">
+              <span>※ 入力すると、認証画面でメールアドレスが自動入力されます</span>
+            </div>
+          </div>
+
           <div className="form-group">
             <label htmlFor="reportType">レポートタイプ</label>
             <select

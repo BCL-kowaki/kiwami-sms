@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { reportType, reportUrl } = body;
+    const { reportType, reportUrl, customerEmail } = body;
 
     const token = generateToken();
     const now = new Date();
@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
       reportTitle: validReportType === 'custom' ? CUSTOM_REPORT_TITLE : undefined,
       reportBody: validReportType === 'custom' ? CUSTOM_REPORT_BODY : undefined,
       reportUrl: reportUrl?.trim() || undefined,
+      customerEmail: customerEmail?.trim() || undefined,
       verified: false,
       createdAt: now.toISOString(),
       expiresAt: expiresAt.toISOString(),

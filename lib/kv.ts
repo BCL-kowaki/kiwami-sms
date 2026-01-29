@@ -11,6 +11,7 @@ export interface ReportData {
   reportTitle?: string;
   reportBody?: string;
   reportUrl?: string;
+  customerEmail?: string;  // 顧客のメールアドレス
   verified: boolean;
   createdAt: string;
   expiresAt: string;

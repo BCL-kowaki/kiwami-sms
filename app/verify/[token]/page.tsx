@@ -70,6 +70,10 @@ export default function VerifyPage() {
 
       if (data.ok) {
         setAuthState('phone');
+        // KVに保存されたcustomerEmailがあれば設定（URLパラメータより優先度低）
+        if (data.data?.customerEmail && !searchParams.get('email')) {
+          setEmail(data.data.customerEmail);
+        }
       } else if (data.expired) {
         setAuthState('expired');
       } else {
