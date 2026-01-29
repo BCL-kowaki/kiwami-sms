@@ -158,22 +158,7 @@ export default function AdminPage() {
 
         <form onSubmit={handleGenerateToken}>
           <div className="form-group">
-            <label htmlFor="customerEmail">送る顧客のメールアドレス（任意）</label>
-            <input
-              id="customerEmail"
-              type="email"
-              value={customerEmail}
-              onChange={(e) => setCustomerEmail(e.target.value)}
-              placeholder="customer@example.com"
-              disabled={loading}
-            />
-            <div className="input-hint">
-              <span>※ 入力すると、認証画面でメールアドレスが自動入力されます</span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="reportUrl">レポートURL</label>
+            <label htmlFor="reportUrl">レポートURL <span style={{ color: '#f87171' }}>*</span></label>
             <input
               id="reportUrl"
               type="url"
@@ -188,13 +173,29 @@ export default function AdminPage() {
             </div>
           </div>
 
+          <div className="form-group">
+            <label htmlFor="customerEmail">送信顧客のメールアドレス <span style={{ color: '#f87171' }}>*</span></label>
+            <input
+              id="customerEmail"
+              type="email"
+              value={customerEmail}
+              onChange={(e) => setCustomerEmail(e.target.value)}
+              placeholder="customer@example.com"
+              disabled={loading}
+              required
+            />
+            <div className="input-hint">
+              <span>※ 認証画面でメールアドレスが自動入力されます</span>
+            </div>
+          </div>
+
           {error && (
             <div className="error">
               <span>{error}</span>
             </div>
           )}
 
-          <button type="submit" disabled={loading || !reportUrl.trim()}>
+          <button type="submit" disabled={loading || !reportUrl.trim() || !customerEmail.trim()}>
             {loading ? '発行中...' : 'URLを発行'}
           </button>
         </form>
