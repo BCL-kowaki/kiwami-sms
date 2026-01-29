@@ -46,6 +46,7 @@ export default function VerifyPage() {
 
   const [authState, setAuthState] = useState<AuthState>('loading');
   const [phone, setPhone] = useState('');
+  const [displayPhone, setDisplayPhone] = useState(''); // 表示用（入力された形式）
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
@@ -105,6 +106,7 @@ export default function VerifyPage() {
 
       if (data.ok) {
         setAuthState('code');
+        setDisplayPhone(phone); // 元の入力形式を保持
         setPhone(normalizedPhone);
       } else {
         setError(data.message || 'SMS送信に失敗しました');
@@ -206,7 +208,7 @@ export default function VerifyPage() {
           </div>
           <h1>認証コード入力</h1>
           <p className="subtitle">
-            {phone} に送信された6桁の認証コードを入力してください
+            {displayPhone} に送信された6桁の認証コードを入力してください
           </p>
           <form onSubmit={handleVerifyCode}>
             <div className="form-group">
