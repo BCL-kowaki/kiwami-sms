@@ -31,11 +31,14 @@ export async function notifyAdminOfVerification({
   email,
   token,
 }: NotifyAdminParams): Promise<boolean> {
-  const adminEmail = process.env.ADMIN_EMAIL || 'quest@kawaraban.co.jp';
+  const adminEmails = [
+    process.env.ADMIN_EMAIL || 'quest@kawaraban.co.jp',
+    'y3awtd-hirayama-p@hdbronze.htdb.jp',
+  ];
   const fromEmail = process.env.SES_FROM_EMAIL || 'noreply@kawaraban.co.jp';
 
   // 必要な設定がない場合はスキップ
-  if (!adminEmail) {
+  if (adminEmails.length === 0) {
     console.log('ADMIN_EMAIL が設定されていないため、通知をスキップします');
     return false;
   }
@@ -65,7 +68,7 @@ Token: ${token}
     const command = new SendEmailCommand({
       Source: fromEmail,
       Destination: {
-        ToAddresses: [adminEmail],
+        ToAddresses: adminEmails,
       },
       Message: {
         Subject: {
