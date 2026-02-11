@@ -21,26 +21,25 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { reportType, reportUrl, customerEmail } = body;
+    const { customerEmail } = body;
+
+    if (!customerEmail || typeof customerEmail !== 'string') {
+      return NextResponse.json(
+        { ok: false, message: '顧客のメールアドレスが必要です' },
+        { status: 400 }
+      );
+    }
 
     const token = generateToken();
     const now = new Date();
     const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7日後
 
-    // レポートタイプの検証
-    const validReportType = reportType === 'custom' ? 'custom' : 'fixed';
-    
-    // カスタムレポートの固定文言
-    const CUSTOM_REPORT_TITLE = '診断レポート';
-    const CUSTOM_REPORT_BODY = 'この度は、診断サービスをご利用いただきありがとうございます。\n\n下記のボタンよりレポートをお受け取りいただけます。';
-
     const reportData: ReportData = {
       token,
-      reportType: validReportType,
-      reportTitle: validReportType === 'custom' ? CUSTOM_REPORT_TITLE : undefined,
-      reportBody: validReportType === 'custom' ? CUSTOM_REPORT_BODY : undefined,
-      reportUrl: reportUrl?.trim() || undefined,
-      customerEmail: customerEmail?.trim() || undefined,
+      // レポートは送らず「SMS認証のみ」の用途だが、
+      // 既存の型互換のため reportType は fixed を設定する
+      reportType: 'fixed',
+      customerEmail: customerEmail.trim(),
       verified: false,
       createdAt: now.toISOString(),
       expiresAt: expiresAt.toISOString(),

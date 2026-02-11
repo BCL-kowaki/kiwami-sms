@@ -9,9 +9,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [generatedToken, setGeneratedToken] = useState<string | null>(null);
   const [verifyUrl, setVerifyUrl] = useState<string | null>(null);
-  
-  // レポート入力フォーム
-  const [reportUrl, setReportUrl] = useState('');
+
+  // 顧客メールアドレス入力フォーム
   const [customerEmail, setCustomerEmail] = useState('');
 
   useEffect(() => {
@@ -72,8 +71,6 @@ export default function AdminPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          reportType: 'custom',
-          reportUrl: reportUrl.trim() || undefined,
           customerEmail: customerEmail.trim() || undefined,
         }),
         credentials: 'include',
@@ -85,7 +82,6 @@ export default function AdminPage() {
         setGeneratedToken(data.token);
         setVerifyUrl(data.verifyUrl);
         // フォームをリセット
-        setReportUrl('');
         setCustomerEmail('');
       } else {
         setError(data.message || 'tokenの発行に失敗しました');
@@ -154,27 +150,11 @@ export default function AdminPage() {
     <div className="container">
       <div className="card">
         <h1>管理者ページ</h1>
-        <p className="subtitle">レポート閲覧用のtokenを発行します</p>
+        <p className="subtitle">SMS認証用の専用URLを発行します</p>
 
         <form onSubmit={handleGenerateToken}>
           <div className="form-group">
-            <label htmlFor="reportUrl">レポートURL <span style={{ color: '#f87171' }}>*</span></label>
-            <input
-              id="reportUrl"
-              type="url"
-              value={reportUrl}
-              onChange={(e) => setReportUrl(e.target.value)}
-              placeholder="https://drive.google.com/file/d/xxxxx/view"
-              disabled={loading}
-              required
-            />
-            <div className="input-hint">
-              <span>※ Google DriveやDropboxなどの共有URLを入力してください</span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="customerEmail">送信顧客のメールアドレス <span style={{ color: '#f87171' }}>*</span></label>
+            <label htmlFor="customerEmail">顧客のメールアドレス <span style={{ color: '#f87171' }}>*</span></label>
             <input
               id="customerEmail"
               type="email"
@@ -185,7 +165,7 @@ export default function AdminPage() {
               required
             />
             <div className="input-hint">
-              <span>※ 認証画面でメールアドレスが自動入力されます</span>
+              <span>※ このメールアドレスとSMS認証された電話番号が紐づけられ、社内に通知されます</span>
             </div>
           </div>
 
@@ -195,8 +175,8 @@ export default function AdminPage() {
             </div>
           )}
 
-          <button type="submit" disabled={loading || !reportUrl.trim() || !customerEmail.trim()}>
-            {loading ? '発行中...' : 'URLを発行'}
+          <button type="submit" disabled={loading || !customerEmail.trim()}>
+            {loading ? '発行中...' : '専用URLを発行'}
           </button>
         </form>
 

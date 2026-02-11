@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { normalizePhoneNumber } from '@/lib/utils';
 
-type AuthState = 'loading' | 'phone' | 'code' | 'error' | 'expired';
+type AuthState = 'loading' | 'phone' | 'code' | 'error' | 'expired' | 'completed';
 
 // メールアイコン
 const MailIcon = ({ className }: { className?: string }) => (
@@ -40,7 +40,6 @@ const ErrorIcon = ({ className }: { className?: string }) => (
 
 export default function VerifyPage() {
   const params = useParams();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const token = params.token as string;
 
@@ -136,8 +135,8 @@ export default function VerifyPage() {
       const data = await response.json();
 
       if (data.ok) {
-        // 認証成功：レポートページに遷移
-        router.push(`/report/${token}`);
+        // 認証成功：サンクスページを表示
+        setAuthState('completed');
       } else {
         if (data.expired) {
           setAuthState('expired');
@@ -191,6 +190,32 @@ export default function VerifyPage() {
             <ErrorIcon className="error-icon" />
             <span>管理者に再発行を依頼してください</span>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 認証完了（サンクスページ）
+  if (authState === 'completed') {
+    return (
+      <div className="container">
+        <div className="card">
+          <div className="icon-wrapper">
+            <div className="icon-circle">
+              <ShieldIcon className="" />
+            </div>
+          </div>
+          <h1>SMS認証が完了しました</h1>
+          <p className="subtitle" style={{ whiteSpace: 'pre-wrap' }}>
+            SMS認証にご協力いただきありがとうございます。
+            {'\n'}
+            ご入力内容および本人確認が完了しました。
+            {'\n'}
+            {'\n'}
+            内容を確認次第、
+            担当者よりご登録の連絡先へ
+            速やかにご連絡いたします。
+          </p>
         </div>
       </div>
     );
@@ -263,7 +288,7 @@ export default function VerifyPage() {
         </div>
         <h1>ご本人様確認のため、<br />SMS認証をお願いします</h1>
         <p className="subtitle">
-          レポートを閲覧するには、電話番号によるSMS認証が必要です
+          ご本人様確認のため、電話番号によるSMS認証を行います
         </p>
         <form onSubmit={handleSendSMS}>
           <div className="form-group">
